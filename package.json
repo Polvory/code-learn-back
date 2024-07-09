@@ -27,6 +27,7 @@
     "@nestjs/schedule": "^4.0.2",
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/swagger": "^7.3.1",
+    "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "nestjs-telegraf": "^2.7.0",
     "openai": "^4.52.1",

@@ -2,9 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cors from 'cors';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
-  const PORT = 3033;
+  dotenv.config();
+  const PORT = process.env.PORT || 3000;
   const prefix = 'ai';
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(prefix);
