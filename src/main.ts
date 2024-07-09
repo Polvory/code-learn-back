@@ -8,15 +8,19 @@ async function bootstrap() {
   const prefix = 'ai';
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(prefix);
-
+  // app.enableCors()
   // Разрешаем CORS
-  app.use(
-    cors({
-      credentials: true,
-      origin: true,
-    }),
-  );
-
+  // app.use(
+  //   cors({
+  //     credentials: true,
+  //     origin: true,
+  //   }),
+  // );
+  // Включение CORS
+  app.enableCors({
+    origin: 'http://localhost:8080/', // Замените на ваш фронтенд URL
+    credentials: true,
+  });
   // Настройка Swagger
   const config = new DocumentBuilder()
     .setTitle('code-learn API')
