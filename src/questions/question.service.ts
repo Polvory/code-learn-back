@@ -204,7 +204,9 @@ export class QuestionService {
     }
 
 
-    async getAllCards(searchValue: string) {
+
+
+    async getAllCards(searchValue?: string) {
         const whereClause = searchValue ? { type: { [Op.like]: searchValue } } : {};
         return this.CardsRepository.findAll({
             where: whereClause,
