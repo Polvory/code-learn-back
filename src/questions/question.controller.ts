@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiProperty, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiProperty, ApiResponse, ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { QuestionService } from './question.service'
 import { addQwToUser } from './dto/addQwToUser.dto';
 import { AiAnswerDto } from './dto/AiAnswer.dto';
@@ -71,8 +71,10 @@ export class QwestionsController {
     @ApiOperation({ summary: 'Получить карточки тем' })
     @ApiResponse({ status: 200 })
     @Get('/get/cards')
-    getAllCards() {
-        return this.QuestionService.getAllCards()
+    @ApiQuery({ name: 'searchValue', required: false })
+    getAllCards(@Query('searchValue') searchValue?: string) {
+
+        return this.QuestionService.getAllCards(searchValue)
     }
 
     @ApiOperation({ summary: 'Создать вопрос' })

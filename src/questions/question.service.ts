@@ -10,7 +10,7 @@ import { AiAnswerDto } from './dto/AiAnswer.dto';
 import { createCardsDto, createQw, createQwList } from './dto/createDataQw.dto';
 import { dataQwCreationAttrs } from './dataQw.model'
 import { CardsToUser } from './CardsToUser.model'
-
+const { Op } = require('sequelize');
 @Injectable()
 export class QuestionService {
     private readonly logger = new Logger(QuestionService.name)
@@ -204,7 +204,12 @@ export class QuestionService {
     }
 
 
-    async getAllCards() {
-        return this.CardsRepository.findAll({ include: { all: true } })
+    async getAllCards(searchValue: string) {
+        const whereClause = searchValue ? { type: { [Op.like]: searchValue } } : {};
+        return this.CardsRepository.findAll({
+            where: whereClause,
+            order: [['createdAt', 'ASC']], // Сортировка по дате создания
+            include: { all: true }
+        })
     }
 }
