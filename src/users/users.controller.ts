@@ -12,18 +12,25 @@ export class UsersController {
 
     @ApiResponse({ status: 200, type: createUser })
 
-
+    @ApiBearerAuth('JWT') // Указываем, что используем Bearer token с именем 'JWT'
+    @UseGuards(JwtAuthGuard)
     @ApiResponse({ status: 200 })
     @Get('/get/users')
     async getCardUsers() {
         return await this.UsersService.getCardUsers()
     }
+
+    @ApiBearerAuth('JWT') // Указываем, что используем Bearer token с именем 'JWT'
+    @UseGuards(JwtAuthGuard)
     @ApiResponse({ status: 200 })
     @Delete('/Delete/user')
     async DeleteUser(@Query('user_id') user_id: string) {
         return await this.UsersService.DeleteUser(user_id)
     }
 
+
+    @ApiBearerAuth('JWT') // Указываем, что используем Bearer token с именем 'JWT'
+    @UseGuards(JwtAuthGuard)
     @Post('/create/users')
     @HttpCode(HttpStatus.OK)
     createUser(@Body() dto: createUser) {

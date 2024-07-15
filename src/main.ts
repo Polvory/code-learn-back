@@ -2,21 +2,27 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cors from 'cors';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
-  const PORT = 3033;
+  dotenv.config();
+  const PORT = process.env.PORT || 3000;
   const prefix = 'ai';
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(prefix);
-
+  // app.enableCors()
   // Разрешаем CORS
-  app.use(
-    cors({
-      credentials: true,
-      origin: true,
-    }),
-  );
-
+  // app.use(
+  //   cors({
+  //     credentials: true,
+  //     origin: true,
+  //   }),
+  // );
+  // Включение CORS
+  app.enableCors({
+    origin: 'http://localhost:8080/', // Замените на ваш фронтенд URL
+    credentials: true,
+  });
   // Настройка Swagger
   const config = new DocumentBuilder()
     .setTitle('code-learn API')

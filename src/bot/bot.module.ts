@@ -6,9 +6,11 @@ import { getBotConfig } from '../config/bot.config';
 import { session } from 'telegraf';
 import { UsersModule } from '../users/users.module'
 import { JwtCustomModule } from '../jwt/jwt.module'
+import { QwestionsModule } from '../questions/question.module';
 
 @Module({
   imports: [
+    QwestionsModule,
     JwtCustomModule,
     UsersModule,
     TelegrafModule.forRoot({
