@@ -8,6 +8,7 @@ import { DataQw } from "./dataQw.model";
 interface cardsreationAttrs {
     type: string;
     description: string;
+    img_url: string;
 }
 
 @Table({ tableName: 'cards' })
@@ -21,6 +22,9 @@ export class Cards extends Model<Cards, cardsreationAttrs> {
 
     @Column({ type: DataType.TEXT })
     description: string;
+
+    @Column({ type: DataType.STRING })
+    img_url: string;
 
     @BelongsToMany(() => Users, () => CardsToUser)
     users: Users[];

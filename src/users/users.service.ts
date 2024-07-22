@@ -18,6 +18,10 @@ export class UsersService {
         return validate_user
     }
 
+    async getDataUser(user_id: string) {
+        return await this.UsersRepository.findOne({ where: { user_id } })
+    }
+
     async DeleteUser(user_id: string) {
         return await this.UsersRepository.destroy({ where: { user_id } })
     }
@@ -50,7 +54,7 @@ export class UsersService {
         let validate_user = await this.validate(user_id)
         const isCurrentDate = this.isCurrentDateNotGreaterThan(validate_user.subscription_date)
         this.logger.log(`Проверяем дату подписки ${user_id} :${isCurrentDate}`)
-        if (validate_user.reqvests >= 0 && isCurrentDate) {
+        if (validate_user.reqvests > 0 && isCurrentDate) {
             validate_user.reqvests = validate_user.reqvests - 1
             await validate_user.save()
             return validate_user.reqvests

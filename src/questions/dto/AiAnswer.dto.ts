@@ -11,5 +11,6 @@ export class AiAnswerDto {
     @ApiProperty({ example: 'Что такое замыкания(closures) в JavaScript и как они работают ?', description: 'текст вопроса' })
     question: string
 
+    @ApiProperty({ example: '5bcacbea-cae7-4dad-8dc2-a793196f8313', description: 'id вопроса' })
     last_question_id: string
 }

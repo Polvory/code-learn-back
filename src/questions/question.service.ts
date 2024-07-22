@@ -79,40 +79,40 @@ export class QuestionService {
                     role: 'user', content: `${dto.text}`
                 }
             ]
-            // const progress = await this.getQwestionsLength(dto.user_id, dto.type)
+            const progress = await this.getQwestionsLength(dto.user_id, dto.type)
 
-            // this.logger.log(answer)
-            // return {
-            //     result: false,
-            //     progress: progress,
-            //     requests: user_requests,
-            //     text: 'хуй'
-            // }
-            this.logger.warn('Проверяем ответ')
-            const ai_answer: any = await this.OpenAiService.getCompletions(answer)
-            this.logger.log(ai_answer)
-            if (ai_answer) {
-                const ai_answer_parse = JSON.parse(await ai_answer)
-                this.logger.warn(ai_answer_parse['result'])
-                if (ai_answer_parse['result']) {
-                    this.logger.log('Сохраняем результат')
-                    Qw.result = true
-                    await Qw.save()
-                }
-                this.logger.log(ai_answer_parse['description'])
-                if (ai_answer_parse['description'] != "") {
-                    const progress = await this.getQwestionsLength(dto.user_id, dto.type)
-                    return {
-                        result: ai_answer_parse['result'],
-                        progress: progress,
-                        requests: user_requests,
-                        text: ai_answer_parse['description']
-                    }
-                } else {
-                    throw new HttpException('NO_CONTENT', HttpStatus.NO_CONTENT);
-                }
-
+            this.logger.log(progress)
+            return {
+                result: true,
+                progress: progress,
+                requests: user_requests,
+                text: 'хуй'
             }
+            // this.logger.warn('Проверяем ответ')
+            // const ai_answer: any = await this.OpenAiService.getCompletions(answer)
+            // this.logger.log(ai_answer)
+            // if (ai_answer) {
+            //     const ai_answer_parse = JSON.parse(await ai_answer)
+            //     this.logger.warn(ai_answer_parse['result'])
+            //     if (ai_answer_parse['result']) {
+            //         this.logger.log('Сохраняем результат')
+            //         Qw.result = true
+            //         await Qw.save()
+            //     }
+            //     this.logger.log(ai_answer_parse['description'])
+            //     if (ai_answer_parse['description'] != "") {
+            //         const progress = await this.getQwestionsLength(dto.user_id, dto.type)
+            //         return {
+            //             result: ai_answer_parse['result'],
+            //             progress: progress,
+            //             requests: user_requests,
+            //             text: ai_answer_parse['description']
+            //         }
+            //     } else {
+            //         throw new HttpException('NO_CONTENT', HttpStatus.NO_CONTENT);
+            //     }
+
+            // }
         } catch (error) {
             console.log(error)
             return error
@@ -122,7 +122,7 @@ export class QuestionService {
 
     async createCards(dto: createCardsDto) {
         this.logger.log('Создали карточку')
-        return await this.CardsRepository.create({ type: dto.type, description: dto.description })
+        return await this.CardsRepository.create(dto)
     }
 
     async edithCards(dto: createCardsDto) {

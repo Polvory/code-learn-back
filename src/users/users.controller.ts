@@ -37,6 +37,13 @@ export class UsersController {
         return this.UsersService.createUser(dto)
     }
 
+
+    @ApiResponse({ status: 200 })
+    @Get('/get/user/data')
+    async getDataUser(@Query('user_id') user_id: string) {
+        return await this.UsersService.getDataUser(user_id)
+    }
+
     @ApiResponse({ status: 200 })
     @Get('/get/user/card')
     async getCardUser(@Query('user_id') user_id: string, @Query('type') type: string) {
