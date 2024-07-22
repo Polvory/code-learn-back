@@ -18,12 +18,16 @@ export class createQwList {
     list: createQw[];
 }
 
+
 export class createCardsDto {
     @ApiProperty({ example: '39808230-eb5e-4634-9fb3-1b1a97c2e397', description: 'id карточки' })
     id?: string
 
     @ApiProperty({ example: 'JavaScript', description: 'type' })
     type: string;
+
+    @ApiProperty({ example: 'https://avatars.mds.yandex.net/i?id=49c686bf699965b32f0ccea0716a57d0c5e89019-10234623-images-thumbs&n=13', description: 'ссылка на картинку' })
+    img_url: string;
 
     @ApiProperty({ example: 'JavaScript — это язык программирования, который в первую очередь применяют в веб-разработке.', description: 'description' })
     description: string

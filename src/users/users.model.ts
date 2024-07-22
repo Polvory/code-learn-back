@@ -7,6 +7,7 @@ interface UsersCreationAttrs {
     id: string;
     user_id: string | number;
     user_name?: string;
+    user_image: string
     banned: boolean;
     reqvests: number;
     premium: boolean;
@@ -32,6 +33,10 @@ export class Users extends Model<Users, UsersCreationAttrs> {
     @Column({ type: DataType.TEXT })
     user_name: string;
 
+    @Column({ type: DataType.STRING })
+    user_image: string;
+
+
     @Column({ type: DataType.BOOLEAN, defaultValue: false })
     banned: boolean;
 
@@ -44,6 +49,6 @@ export class Users extends Model<Users, UsersCreationAttrs> {
     @BelongsToMany(() => Cards, () => CardsToUser)
     cards: Cards[];
 
-    @Column({ type: DataType.BOOLEAN, defaultValue: add_Date() })
+    @Column({ type: DataType.STRING, defaultValue: add_Date() })
     subscription_date: string;
 }
