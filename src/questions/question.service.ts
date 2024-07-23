@@ -81,38 +81,38 @@ export class QuestionService {
             ]
             const progress = await this.getQwestionsLength(dto.user_id, dto.type)
 
-            this.logger.log(progress)
-            return {
-                result: true,
-                progress: progress,
-                requests: user_requests,
-                text: 'хуй'
-            }
-            // this.logger.warn('Проверяем ответ')
-            // const ai_answer: any = await this.OpenAiService.getCompletions(answer)
-            // this.logger.log(ai_answer)
-            // if (ai_answer) {
-            //     const ai_answer_parse = JSON.parse(await ai_answer)
-            //     this.logger.warn(ai_answer_parse['result'])
-            //     if (ai_answer_parse['result']) {
-            //         this.logger.log('Сохраняем результат')
-            //         Qw.result = true
-            //         await Qw.save()
-            //     }
-            //     this.logger.log(ai_answer_parse['description'])
-            //     if (ai_answer_parse['description'] != "") {
-            //         const progress = await this.getQwestionsLength(dto.user_id, dto.type)
-            //         return {
-            //             result: ai_answer_parse['result'],
-            //             progress: progress,
-            //             requests: user_requests,
-            //             text: ai_answer_parse['description']
-            //         }
-            //     } else {
-            //         throw new HttpException('NO_CONTENT', HttpStatus.NO_CONTENT);
-            //     }
-
+            // this.logger.log(progress)
+            // return {
+            //     result: true,
+            //     progress: progress,
+            //     requests: user_requests,
+            //     text: 'хуй'
             // }
+            this.logger.warn('Проверяем ответ')
+            const ai_answer: any = await this.OpenAiService.getCompletions(answer)
+            this.logger.log(ai_answer)
+            if (ai_answer) {
+                const ai_answer_parse = JSON.parse(await ai_answer)
+                this.logger.warn(ai_answer_parse['result'])
+                if (ai_answer_parse['result']) {
+                    this.logger.log('Сохраняем результат')
+                    Qw.result = true
+                    await Qw.save()
+                }
+                this.logger.log(ai_answer_parse['description'])
+                if (ai_answer_parse['description'] != "") {
+                    const progress = await this.getQwestionsLength(dto.user_id, dto.type)
+                    return {
+                        result: ai_answer_parse['result'],
+                        progress: progress,
+                        requests: user_requests,
+                        text: ai_answer_parse['description']
+                    }
+                } else {
+                    throw new HttpException('NO_CONTENT', HttpStatus.NO_CONTENT);
+                }
+
+            }
         } catch (error) {
             console.log(error)
             return error
@@ -134,6 +134,13 @@ export class QuestionService {
 
     }
 
+
+
+    async getCorrectQwestions(user_id: string, type: string) {
+        const res = await this.UsersQwRepository.findAll({ where: { user_id: user_id, type: type, result: true } })
+        return res.length
+
+    }
 
     async getQwestions(user_id: string, type: string) {
         const res = await this.UsersQwRepository.findAll({ where: { user_id: user_id, type: type, result: false } })

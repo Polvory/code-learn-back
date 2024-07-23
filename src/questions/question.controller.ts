@@ -107,6 +107,27 @@ export class QwestionsController {
 
     }
 
+
+    @ApiOperation({ summary: 'Получить план юзера' })
+    @ApiResponse({ status: 200 })
+    @Get('/get/usr/plan')
+    async getUserPlan(@Query('user_id') user_id: string, @Query('type') type: string) {
+        let user = await this.UsersService.getCardUser(user_id, type)
+        if (user) {
+            let correct = await this.QuestionService.getCorrectQwestions(user_id, type)
+            return {
+                status: true,
+                correct: correct
+            }
+        } else {
+            return {
+                status: false,
+                correct: 0
+            }
+        }
+
+    }
+
     @ApiOperation({ summary: 'Добавить план юзеру' })
     @ApiResponse({ status: 201 })
     @Post('/add/plan')
