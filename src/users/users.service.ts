@@ -70,6 +70,8 @@ export class UsersService {
 
     async getCardUser(user_id: string, type: string) {
         const user = await this.UsersRepository.findOne({ where: { user_id: user_id }, include: { all: true } });
+        console.log(user)
+
         return this.includesType(user.cards, type)
     }
     includesType(cards, type) {
