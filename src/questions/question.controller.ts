@@ -19,6 +19,9 @@ export class QwestionsController {
         private QuestionService: QuestionService
     ) { }
 
+
+
+
     @ApiOperation({ summary: 'Запрос к chatGPT' })
     @ApiResponse({ status: 200 })
     @Post('/ai/answer')
@@ -56,6 +59,14 @@ export class QwestionsController {
     edithCards(@Body() dto: createCardsDto) {
         return this.QuestionService.edithCards(dto)
     }
+
+
+    @ApiResponse({ status: 200 })
+    @Get('/get/rating')
+    async getRatingUsers() {
+        return await this.QuestionService.getRatingUsers()
+    }
+
 
     @ApiOperation({ summary: 'Удалить карточку тем' })
     @ApiResponse({ status: 200 })
