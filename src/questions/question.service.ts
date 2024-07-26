@@ -133,13 +133,45 @@ export class QuestionService {
         return await this.CardsRepository.destroy({ where: { id: id } })
 
     }
+    async countRecordsByUserId(dataArray) {
+        // Создаем объект для хранения количества записей по каждому user_id
+        const counts = {};
+        let userId
+        // Проходим по каждому элементу в массиве
+        dataArray.forEach(item => {
+            userId = item.user_id;
 
+            // Если userId уже есть в объекте, увеличиваем счетчик
+            // В противном случае инициализируем счетчик для нового userId
+            if (counts[userId]) {
+                counts[userId]++;
+            } else {
+                counts[userId] = 1;
+            }
+        });
+
+        let user = await this.UsersService.getDataUser(String(userId))
+        this.logger.log('Ищем юзера')
+        // Преобразуем объект counts в массив объектов нужного формата
+        return Object.keys(counts).map(userId => ({
+            user_id: userId,
+            user_name: user.user_name,
+            user_image: user.user_image,
+            count: counts[userId]
+        }));
+    }
 
 
     async getCorrectQwestions(user_id: string, type: string) {
         const res = await this.UsersQwRepository.findAll({ where: { user_id: user_id, type: type, result: true } })
         return res.length
 
+    }
+
+    async getRatingUsers() {
+        const res = await this.UsersQwRepository.findAll({ where: { result: true } })
+        return await this.countRecordsByUserId(res)
+        // return 
     }
 
     async getQwestions(user_id: string, type: string) {
