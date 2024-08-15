@@ -181,12 +181,15 @@ export class QuestionService {
         let raitinglist = []
         for (let index = 0; index < users.length; index++) {
             const element = users[index];
+            this.logger.log(JSON.stringify(users[index]))
+            const count = await this.UsersQwRepository.findAll({ where: { result: true, user_id: String(element.user_id) } })
+            this.logger.log(count)
             raitinglist.push(
                 {
-                    user_id: element.userId,
+                    user_id: element.user_id,
                     user_name: `@${element.user_name}`,
                     user_image: element.user_image,
-                    count: 0
+                    count: count.length
                 }
             )
         }
