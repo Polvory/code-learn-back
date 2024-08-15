@@ -123,6 +123,52 @@ ${plan_list.map(item => item.trim(','))}\n
         }
 
     }
+
+
+
+
+
+
+    @Hears(`/start_quiz`)
+    async sendPoll(ctx: Context) {
+        let currentQuestionIndex = 0;
+        const chatId = '6935066908'; // Замените на нужный chat_id
+        const questions = [
+            {
+                question: 'Какой язык программирования используется для создания веб-страниц?',
+                options: ['JavaScript', 'Python', 'Java', 'C++'],
+                correct: 'JavaScript',
+            },
+            {
+                question: 'Что такое HTML?',
+                options: ['Язык программирования', 'Язык разметки', 'Стиль оформления', 'Фреймворк'],
+                correct: 'Язык разметки',
+            },
+            // Добавьте больше вопросов по необходимости
+        ];
+
+        const question = questions[currentQuestionIndex];
+        const correctOptionId = question.options.indexOf(question.correct);
+
+        await this.bot.sendQuiz(
+            chatId,
+
+            question.question,
+            question.options,
+            {
+
+                is_anonymous: true,
+                correct_option_id: 0,
+                explanation: 'Не верно!'
+            },
+
+        );
+    }
+
+
+
+
+
     @Cron('0 0 * * *')
     async updateRequests(ctx: Context) {
         const users = await this.UsersService.getAllUsers()

@@ -136,10 +136,10 @@ export class QuestionService {
     async countRecordsByUserId(dataArray) {
         // Создаем объект для хранения количества записей по каждому user_id
         const counts = {};
-        let userId
+
         // Проходим по каждому элементу в массиве
         dataArray.forEach(item => {
-            userId = item.user_id;
+            const userId = item.user_id;
 
             // Если userId уже есть в объекте, увеличиваем счетчик
             // В противном случае инициализируем счетчик для нового userId
@@ -150,27 +150,57 @@ export class QuestionService {
             }
         });
 
-        let user = await this.UsersService.getDataUser(String(userId))
-        this.logger.log('Ищем юзера')
-        // Преобразуем объект counts в массив объектов нужного формата
-        return Object.keys(counts).map(userId => ({
-            user_id: userId,
-            user_name: user.user_name,
-            user_image: user.user_image,
-            count: counts[userId]
-        }));
+
+        // Преобразуем объект counts в массив промисов
+        const promises = Object.keys(counts).map(async (userId) => {
+            let user = await this.UsersService.getDataUser(String(userId));
+            console.log(user);
+            return {
+                user_id: userId,
+                user_name: `@${user.user_name}`,
+                user_image: user.user_image,
+                count: counts[userId]
+            };
+        });
+
+        // Ожидаем разрешения всех промисов и возвращаем результат
+        return Promise.all(promises);
     }
 
 
     async getCorrectQwestions(user_id: string, type: string) {
         const res = await this.UsersQwRepository.findAll({ where: { user_id: user_id, type: type, result: true } })
+
         return res.length
 
     }
 
     async getRatingUsers() {
-        const res = await this.UsersQwRepository.findAll({ where: { result: true } })
-        return await this.countRecordsByUserId(res)
+        const users: any = await this.UsersService.getAllUsers()
+        this.logger.log(`Получем юзеров:${users.length}`)
+        let raitinglist = []
+        for (let index = 0; index < users.length; index++) {
+            const element = users[index];
+            raitinglist.push(
+                {
+                    user_id: element.userId,
+                    user_name: `@${element.user_name}`,
+                    user_image: element.user_image,
+                    count: 0
+                }
+            )
+        }
+        return raitinglist
+
+        // const res = await this.UsersQwRepository.findAll({ where: { result: true } })
+        // let user = await this.UsersService.getDataUser(String(userId))
+        // this.logger.log('Ищем юзера')
+        // user_name: user.user_name,
+        //     user_image: user.user_image,
+        // let raitinglist: any = await this.countRecordsByUserId(res)
+
+
+        // return raitinglist
         // return 
     }
 

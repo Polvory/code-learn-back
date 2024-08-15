@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, UseGuards, Delete, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, UseGuards, Delete, Param, Post, Query, Logger } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service'
 import { createUser } from './dto/createUser.dto';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 @Controller('users')
 export class UsersController {
     constructor(private UsersService: UsersService) { }
+    private readonly logger = new Logger(UsersController.name)
 
     @ApiResponse({ status: 200, type: createUser })
 
@@ -41,7 +42,22 @@ export class UsersController {
     @ApiResponse({ status: 200 })
     @Get('/get/user/data')
     async getDataUser(@Query('user_id') user_id: string) {
-        return await this.UsersService.getDataUser(user_id)
+        this.logger.warn(`Ищем юзера ${user_id}`)
+        const user = await this.UsersService.getDataUser(user_id)
+        if (!user) {
+            this.logger.error(`Пользователь не найден ${user_id}`)
+            const pauloud: any = {
+                user_id: String(user_id),
+                user_name: 'Путник',
+                user_image: 'https://avatars.githubusercontent.com/u/84640980?v=4'
+            }
+            const new_user = await this.UsersService.createUser(pauloud)
+            this.logger.log(`Создан пользователь ${user_id}`)
+            return new_user
+        }
+        this.logger.log(`Пользователь найден ${user_id}`)
+        return user
+
     }
 
     @ApiResponse({ status: 200 })
