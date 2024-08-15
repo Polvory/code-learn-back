@@ -61,6 +61,7 @@ export class QwestionsController {
     }
 
 
+    @ApiOperation({ summary: 'Получить рэйтинг' })
     @ApiResponse({ status: 200 })
     @Get('/get/rating')
     async getRatingUsers() {
